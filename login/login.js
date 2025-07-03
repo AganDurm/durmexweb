@@ -15,7 +15,7 @@ async function checkAuth() {
   // noinspection JSUnusedLocalSymbols,JSUnresolvedReference
   const {data: {user}, error} = await client.auth.getUser();
   if (!error && user) {
-    window.location.href = '/durmexweb/index.html';
+    window.location.href = '/index.html';
   }
 }
 
