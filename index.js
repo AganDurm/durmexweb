@@ -3,7 +3,13 @@
 const supabaseUrl = 'https://qetcttwggszpgagwqdgl.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFldGN0dHdnZ3N6cGdhZ3dxZGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzODM5OTIsImV4cCI6MjA2Njk1OTk5Mn0.vbnom9gvysatVrokV6nWBHDtuac7wntkHkTA51__CBE';
 // noinspection JSUnresolvedReference
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const client = supabase.createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: true,
+    storageKey: 'supabase.auth.token',
+  }
+});
+
 // noinspection JSUnresolvedReference
 const {Grid, html} = gridjs;
 let gridInstance = null;
@@ -26,21 +32,38 @@ const columnNameMap = {
 };
 
 async function checkAuth() {
-  try {
-    // noinspection JSUnresolvedReference
-    const {data: {user}, error: authError} = await supabase.auth.getUser();
-    if (authError) {
-      console.error('Auth error:', authError);
-      return;
-    }
-    if (!user) {
+  // noinspection JSUnresolvedReference
+  const { data: { user }, error: authError } = await client.auth.getUser();
+
+  if (authError || !user) {
+    const loginBtn = document.getElementById('goToLogin');
+    if (loginBtn) loginBtn.style.display = 'block';
+    const logoutBtn = document.getElementById('logout');
+    if (logoutBtn) logoutBtn.style.display = 'none';
+  } else {
+    await handleUserSession(user);
+  }
+
+  // noinspection JSUnresolvedReference
+  client.auth.onAuthStateChange(async (event, session) => {
+    if (session && session.user) {
+      await handleUserSession(session.user);
+    } else {
       const loginBtn = document.getElementById('goToLogin');
       if (loginBtn) loginBtn.style.display = 'block';
-      return;
-    }
+      const logoutBtn = document.getElementById('logout');
+      if (logoutBtn) logoutBtn.style.display = 'none';
 
+      const list = document.getElementById('memberList');
+      if (list) list.innerHTML = '';
+    }
+  });
+}
+
+async function handleUserSession(user) {
+  try {
     // noinspection JSUnresolvedReference
-    const {data: userData, error: userError} = await supabase
+    const { data: userData, error: userError } = await client
       .from('profiles')
       .select('role')
       .eq('id', user.id)
@@ -50,6 +73,7 @@ async function checkAuth() {
       console.error('Error fetching user role:', userError);
       return;
     }
+
     if (!userData || !userData.role) {
       console.error('Missing or invalid role in user data:', userData);
       return;
@@ -58,13 +82,19 @@ async function checkAuth() {
     const logoutBtn = document.getElementById('logout');
     if (logoutBtn) logoutBtn.style.display = 'block';
 
+    const loginBtn = document.getElementById('goToLogin');
+    if (loginBtn) loginBtn.style.display = 'none';
+
     if (userData.role === 'postgres') {
       await getMembers();
     } else {
       const list = document.getElementById('memberList');
-      const span = document.createElement('span');
-      span.textContent = `No access to data for role: ${userData.role}`;
-      list.appendChild(span);
+      if (list) {
+        list.innerHTML = '';
+        const span = document.createElement('span');
+        span.textContent = `No access to data for role: ${userData.role}`;
+        list.appendChild(span);
+      }
       console.log('No access to data for role:', userData.role);
     }
   } catch (err) {
@@ -74,7 +104,7 @@ async function checkAuth() {
 
 async function getMembers() {
   // noinspection JSUnresolvedReference
-  const {data, error} = await supabase
+  const {data, error} = await client
     .from('members')
     .select('*');
 
@@ -206,7 +236,7 @@ async function loadData(tableData) {
 
 async function logout() {
   // noinspection JSUnresolvedReference
-  await supabase.auth.signOut();
+  await client.auth.signOut();
   window.location.href = 'login/login.html';
 }
 
@@ -282,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let oldName = null;
     if (dbColumnName === 'name') {
       // noinspection JSUnresolvedReference
-      const {data, error} = await supabase
+      const {data, error} = await client
         .from('members')
         .select('name')
         .eq('id', id)
@@ -298,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateObj = {};
     updateObj[dbColumnName] = newValue;
 
-    const {error: errorParent} = await supabase
+    const {error: errorParent} = await client
       .from('members')
       .update(updateObj)
       .eq('id', id);
@@ -311,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Update erfolgreich');
 
     if (dbColumnName === 'name' && oldName !== null) {
-      const {error: errorChildren} = await supabase
+      const {error: errorChildren} = await client
         .from('members')
         .update({parent_name: newValue})
         .eq('parent_name', oldName);
@@ -343,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // noinspection JSUnresolvedReference,JSUnusedLocalSymbols
-    const {data, error} = await supabase
+    const {data, error} = await client
       .from('members')
       .insert([newEntry])
       .select()
