@@ -1,41 +1,132 @@
 <!doctype html>
-<html class="no-js" lang="de">
-
+<!--suppress HtmlFormInputWithoutLabel -->
+<html class="no-js" lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>durmex.de | durmex</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="description" content="durmex">
-    <meta property="og:title" content="durmex">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://durmex.de/">
-    <meta property="og:image" content="https://www.durmex.de/logo.svg">
-    <meta property="og:image:alt" content="durmex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>durmex.de | durmex</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="durmex">
+  <meta property="og:title" content="durmex">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://durmex.de/">
+  <meta property="og:image" content="https://www.durmex.de/logo.svg">
+  <meta property="og:image:alt" content="durmex">
 
-    <link rel="icon" href="logo.svg" sizes="any">
-    <link rel="apple-touch-icon" href="logo.svg">
-    <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#fafafa">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" href="logo.svg" sizes="any">
+  <link rel="apple-touch-icon" href="logo.svg">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!--suppress JSUnresolvedLibraryURL -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- GRIDjs -->
+  <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+  <!-- Micromodal -->
+  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 </head>
 <body>
 <div id="loader">
-    <div class="spinner"></div>
-    <p>Loading...</p>
+  <div class="spinner"></div>
+  <p>Loading...</p>
+</div>
+<div class="user-box">
+  <button id="logout" onclick="logout()">Logout</button>
+  <button id="goToLogin" onclick="goToLogin()">Login</button>
 </div>
 <div class="container" id="content" style="display:none;">
   <div class="flex-center" style="margin-bottom: 1rem;">
-    <div class="logo-box">
-      <img src="logo.svg" alt="Logo">
-    </div>
-    <div class="title">durmex.de</div>
+    <div class="title">Mitglieder</div>
   </div>
   <div class="divider"></div>
+  <div id="memberList"></div>
+  <div class="wrapper" id="wrapper"></div>
+</div>
+<div class="modal micromodal-slide" id="modal-new-entry" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-new-entry-title">
+      <header class="modal__header">
+        <h2 class="modal__title" id="modal-new-entry-title" style="text-align: center">Neues Mitglied</h2>
+        <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+      </header>
+      <div class="divider"></div>
+      <main class="modal__content" id="modal-new-entry-content">
+        <div id="new-entry" style="display:flex;flex-flow: wrap;align-items:center;gap:0.5em;margin-bottom: 1em;">
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Verein
+            <input id="input-member_club" placeholder="Verein" value="Dortmund"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Name
+            <input id="input-name" placeholder="Name" value="Adham Kaderi"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Email
+            <input id="input-email" placeholder="Email" value="wreaths.carb.0f@icloud.com"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Password
+            <input id="input-password" placeholder="Password" value="Bayern1010."/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Kreditkarte
+            <input id="input-creditcard" placeholder="Kreditkarte" value="VISA"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Kreditkartennummer
+            <input id="input-creditcard_number" placeholder="Kreditkartennummer" value="4797260019041499"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Monat
+            <input id="input-creditcard_month" placeholder="Monat" maxlength="2" style="width: 60px" value="6"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Jahr
+            <input id="input-creditcard_year" placeholder="Jahr" maxlength="4" style="width: 60px" value="2028"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            CSV
+            <input id="input-creditcard_csv" placeholder="CSV" maxlength="4" style="width: 60px" value="135"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Kreditkartenname
+            <input id="input-creditcard_name" placeholder="Kreditkartenname" value="Luke 159"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Bank
+            <input id="input-bank" placeholder="Bank" value="DORTDE33XXX"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            IBAN
+            <input id="input-bank_iban" placeholder="IBAN" value="DE774405019900223272"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Mitglied
+            <input type="checkbox" id="input-active_member"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Kind
+            <input type="checkbox" id="input-child"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Eltern Name
+            <input id="input-parent_name" placeholder="Eltern Name"/>
+          </label>
+        </div>
+      </main>
+      <footer class="modal__footer">
+        <button id="add-entry" class="modal__btn modal__btn-primary">Speichern</button>
+        <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Abbrechen</button>
+      </footer>
+    </div>
+  </div>
 </div>
 <script src="app.js"></script>
+<script src="index.js"></script>
 </body>
 </html>

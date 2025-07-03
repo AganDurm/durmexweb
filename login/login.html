@@ -1,0 +1,52 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login durmex.de | durmex</title>
+  <link rel="stylesheet" href="../style.css">
+  <meta name="description" content="Login durmex">
+  <meta property="og:title" content="Login durmex">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://durmex.de/">
+  <meta property="og:image" content="https://www.durmex.de/logo.svg">
+  <meta property="og:image:alt" content="durmex">
+
+  <link rel="icon" href="../logo.svg" sizes="any">
+  <link rel="apple-touch-icon" href="../logo.svg">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!--suppress JSUnresolvedLibraryURL -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div id="loader">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+</div>
+<div class="container" id="content" style="display:none;">
+  <div class="flex-center">
+    <div class="logo-box">
+      <img src="../logo.svg" alt="Logo">
+    </div>
+    <div class="title">durmex.de</div>
+  </div>
+  <div class="divider"></div>
+  <form id="loginForm">
+    <!--suppress HtmlFormInputWithoutLabel -->
+    <input type="email" id="email" placeholder="Email" value="durmex@outlook.de">
+    <!--suppress HtmlFormInputWithoutLabel -->
+    <input type="password" id="password" placeholder="Passwort" value="Durmexdurmex1">
+    <button type="submit" id="login">Login</button>
+  </form>
+</div>
+<script src="../app.js"></script>
+<script src="login.js"></script>
+</body>
+</html>
