@@ -61,6 +61,8 @@ async function checkAuth() {
 }
 
 async function handleUserSession(user) {
+  const content = document.getElementById("content");
+  content.style.display = "flex";
   try {
     // noinspection JSUnresolvedReference
     const { data: userData, error: userError } = await client

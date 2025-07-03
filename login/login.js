@@ -20,6 +20,8 @@ async function checkAuth() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const content = document.getElementById("content");
+  content.style.display = "flex";
   const form = document.getElementById('loginForm');
 
   form.addEventListener('submit', async (event) => {
