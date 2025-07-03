@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // noinspection JSUnresolvedReference
     const {error} = await client.auth.signInWithPassword({email, password});
 
-    error ? alert('Login fehlgeschlagen: ' + error.message) : window.location.href = '/durmexweb/index.html';
+    error ? alert('Login fehlgeschlagen: ' + error.message) : window.location.href = '/index.html';
   });
 });
