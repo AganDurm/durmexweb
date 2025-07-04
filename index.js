@@ -29,6 +29,8 @@ const columnNameMap = {
   'Aktiv': 'active_member',
   'Kind': 'child',
   'Eltern Name': 'parent_name',
+  'Adresse': 'address',
+  'Geburtstag': 'birthday',
 };
 
 async function checkAuth() {
@@ -123,7 +125,7 @@ async function getMembers() {
 
     clubs.forEach(club => {
       tableData.push([
-        "", html(`<strong>${club}</strong>`), "", "", "", "", "", "", "", "", "", ""
+        "", html(`<strong>${club}</strong>`), "", "", "", "", "", "", "", "", "", "", "", ""
       ]);
 
       // noinspection JSUnresolvedReference
@@ -142,7 +144,9 @@ async function getMembers() {
           parent.creditcard_year,
           parent.creditcard_csv,
           parent.creditcard_name,
-          parent.active_member ? "✅" : "❌"
+          parent.active_member ? "✅" : "❌",
+          parent.address,
+          parent.birthday
         ]);
 
         // noinspection JSUnresolvedReference
@@ -161,7 +165,9 @@ async function getMembers() {
             child.creditcard_year,
             child.creditcard_csv,
             child.creditcard_name,
-            child.active_member ? "✅" : "❌"
+            child.active_member ? "✅" : "❌",
+            child.address,
+            child.birthday
           ]);
         });
       });
@@ -183,7 +189,6 @@ async function loadData(tableData) {
     columns: [
       {
         name: 'ID',
-        hidden: true
       },
       "Verein",
       {
@@ -205,6 +210,8 @@ async function loadData(tableData) {
         hidden: true
       },
       "Mitglied",
+      "Adresse",
+      "Geburtstag"
     ],
     style: {
       table: {
@@ -247,6 +254,23 @@ function goToLogin() {
 }
 
 async function initModal() {
+  const { data, error } = await client
+    .rpc('get_clubs_enum');
+
+  if (error) {
+    console.error('Failed to get clubs enum:', error.message);
+  } else {
+    const select = document.getElementById('input-member_club');
+    select.innerHTML = '<option value="">Wähle Verein</option>';
+
+    data.forEach(value => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value.charAt(0).toUpperCase() + value.slice(1);
+      select.appendChild(option);
+    });
+  }
+
   // noinspection JSUnresolvedReference,JSUnusedGlobalSymbols
   MicroModal.show('modal-new-entry', {
     onShow: modal => console.info(`${modal.id} is shown`),

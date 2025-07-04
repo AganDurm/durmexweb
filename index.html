@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>durmex.de | durmex</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css">
   <meta name="description" content="durmex">
   <meta property="og:title" content="durmex">
   <meta property="og:type" content="website">
@@ -54,9 +54,9 @@
       <div class="divider"></div>
       <main class="modal__content" id="modal-new-entry-content">
         <div id="new-entry" style="display:flex;flex-flow: wrap;align-items:center;gap:0.5em;margin-bottom: 1em;">
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+          <label style="display:flex; flex-direction: column; align-items:flex-start; gap:0.3em;">
             Verein
-            <input id="input-member_club" placeholder="Verein" />
+            <select id="input-member_club"></select>
           </label>
           <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
             Name
@@ -114,6 +114,14 @@
             Eltern Name
             <input id="input-parent_name" placeholder="Eltern Name"/>
           </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Adresse
+            <input id="input-address" placeholder="Adresse"/>
+          </label>
+          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
+            Geburtstag
+            <input id="input-birthday" placeholder="01.01.2001"/>
+          </label>
         </div>
       </main>
       <footer class="modal__footer">
@@ -125,7 +133,7 @@
 </div>
 <!--suppress JSUnresolvedLibraryURL -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
-<script src="index.js"></script>
+<script src="./app.js"></script>
+<script src="./index.js"></script>
 </body>
 </html>
