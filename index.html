@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>durmex.de | durmex</title>
+  <title>durmex.de | DURMEX</title>
   <link rel="stylesheet" href="./style.css">
   <meta name="description" content="durmex">
   <meta property="og:title" content="durmex">
@@ -20,120 +20,42 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <!-- GRIDjs -->
-  <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
-  <!-- Micromodal -->
-  <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;800&display=swap"
+        rel="stylesheet"/>
 </head>
 <body>
-<div id="loader">
-  <div class="spinner"></div>
-  <p>Loading...</p>
-</div>
-<div class="user-box">
-  <button id="logout" onclick="logout()">Logout</button>
-  <button id="goToLogin" onclick="goToLogin()">Login</button>
-</div>
-<div class="container" id="content" style="display:none;">
-  <div class="flex-center" style="margin-bottom: 1rem;">
-    <div class="title">Mitglieder</div>
-  </div>
-  <div class="divider"></div>
-  <div id="memberList"></div>
-  <div class="wrapper" id="wrapper"></div>
-</div>
-<div class="modal micromodal-slide" id="modal-new-entry" aria-hidden="true">
-  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-new-entry-title">
-      <header class="modal__header">
-        <h2 class="modal__title" id="modal-new-entry-title" style="text-align: center">Neues Mitglied</h2>
-        <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-      </header>
-      <div class="divider"></div>
-      <main class="modal__content" id="modal-new-entry-content">
-        <div id="new-entry" style="display:flex;flex-flow: wrap;align-items:center;gap:0.5em;margin-bottom: 1em;">
-          <label style="display:flex; flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Verein
-            <select id="input-member_club"></select>
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Name
-            <input id="input-name" placeholder="Name" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Email
-            <input id="input-email" placeholder="Email" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Password
-            <input id="input-password" placeholder="Password" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Kreditkarte
-            <input id="input-creditcard" placeholder="Kreditkarte" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Kreditkartennummer
-            <input id="input-creditcard_number" placeholder="Kreditkartennummer" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Monat
-            <input id="input-creditcard_month" placeholder="Monat" maxlength="2" style="width: 60px" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Jahr
-            <input id="input-creditcard_year" placeholder="Jahr" maxlength="4" style="width: 60px" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            CSV
-            <input id="input-creditcard_csv" placeholder="CSV" maxlength="4" style="width: 60px" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Kreditkartenname
-            <input id="input-creditcard_name" placeholder="Kreditkartenname" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Bank
-            <input id="input-bank" placeholder="Bank" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            IBAN
-            <input id="input-bank_iban" placeholder="IBAN" />
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Mitglied
-            <input type="checkbox" id="input-active_member"/>
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Kind
-            <input type="checkbox" id="input-child"/>
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Eltern Name
-            <input id="input-parent_name" placeholder="Eltern Name"/>
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Adresse
-            <input id="input-address" placeholder="Adresse"/>
-          </label>
-          <label style="display:flex;flex-direction: column; align-items:flex-start; gap:0.3em;">
-            Geburtstag
-            <input id="input-birthday" placeholder="01.01.2001"/>
-          </label>
-        </div>
-      </main>
-      <footer class="modal__footer">
-        <button id="add-entry" class="modal__btn modal__btn-primary">Speichern</button>
-        <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Abbrechen</button>
-      </footer>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<canvas id="canvas"></canvas>
+<div class="grid-overlay"></div>
+<div class="noise"></div>
+<div class="scanline"></div>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<div class="scene">
+  <div class="title-wrap">
+    <h1 class="title">DURMEX</h1>
+    <div class="accent-line">
+      <div class="line"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
     </div>
+    <p class="tagline">Something is coming</p>
   </div>
 </div>
-<!--suppress JSUnresolvedLibraryURL -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./app.js"></script>
+
+<div class="status">
+  <div class="status-dot"></div>
+  <span>In Development</span>
+</div>
 <script src="./index.js"></script>
 </body>
 </html>
